@@ -19,7 +19,7 @@ void printMemArr(const int *arr, int size) //void printMemArr(int arr[], int siz
 
 void incArrBy10(int * arr, int size) //void incArrBy10(int arr[], int size)
 {
-    for(int i = 0; 1 < size; i++)
+    for(int i = 0; i < size; i++)
     {
         arr[i] += 10;
     }
