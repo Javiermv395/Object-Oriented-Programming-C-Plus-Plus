@@ -25,7 +25,7 @@ class RPG
     void setskills();
     void printAction(string skill , RPG opponent);
     void updateHealth(int New_Health);
-    void attack(RPG * target);
+    void attack(RPG * target, int, int);
     void useSkill(RPG * target, int, int); 
     void parry(RPG * target);
 
