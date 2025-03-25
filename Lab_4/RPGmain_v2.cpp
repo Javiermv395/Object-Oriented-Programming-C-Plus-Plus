@@ -58,8 +58,8 @@ int main()
         cout<<"Player's turn"<<endl;
         cout<<"Would you like to (1) regular attack or (2) use skill"<<endl;
         cin>>player_choice;
-
-        switch (player_choice)
+        
+        switch (player_choice) 
         {
             case 1:
                 if(NPC.getSkill(NPC_choice) == "parry")
@@ -70,7 +70,7 @@ int main()
                 else
                 {
                     used_Parry = 0;
-                    player.attack(&NPC);
+                    player.attack(&NPC, player_choice, used_Parry);
                     NPC.useSkill(&player, NPC_choice, used_Parry);
                 }
                 cout<<"----------------------------------------------------------------"<<endl;
@@ -83,7 +83,6 @@ int main()
                 player.printSkills();
                 cin>>player_choice;
               
-                //Players choose their skill as a number to be used to determine who takes damage due to some characters having parry as a skill
                 cout<<"NPC's turn"<<endl;
                 NPC_choice = rand () % 2;
     
