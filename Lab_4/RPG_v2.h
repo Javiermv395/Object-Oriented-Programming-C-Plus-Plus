@@ -1,42 +1,148 @@
-#ifndef RPG_H
-#define RPG_H
-#include <string>
-
+#include "RPG.h"
+#include <iostream>
 using namespace std;
+#include <ctime>
+#include <cstdlib>
 
-const int SKILL_SIZE = 2;
-class RPG
+
+RPG::RPG()
 {
-    private:
-    //complete the rest
-    string type; //warrior, mage, theif, archer
-    string skills[SKILL_SIZE];
-    string name; //name of the character
-    int health; //health of the character
-    int strength; //strength of the character
-    int defense; //defense of the character
+    name = "NPC";
+    health = 100;
+    strength = 7;
+    defense = 2;
+    type = "Goblin";
+    skills[0] = "slash";
+    skills[1] = "Pilfer";
+}
 
-    public:
-    //Constructors
-    RPG();
-    RPG(string name, int health, int strngth, int defense, string type);
+RPG::RPG(string name, int health, int strength, int defense, string type)
+{
+    this -> name = name;
+    this -> health = health;
+    this -> strength = strength;
+    this -> defense = defense;
+    this -> type = type;
 
-    //Mutator functions
-    void setskills();
-    void printAction(string skill , RPG opponent);
-    void updateHealth(int New_Health);
-    void attack(RPG * target, int, int);
-    void useSkill(RPG * target, int, int); 
-    void parry(RPG * target);
+    setskills();
+}
 
-    //Accessor functions
-    bool isAlive() const;
-    string getName() const;
-    int getHealth() const;
-    int getStrength() const;
-    int getDefense() const;
-    void printSkills() const;
-    string getSkill(int index) const;
-};
+string RPG::getName() const
+{
+    return name;
+}
 
-#endif
+int RPG::getHealth() const
+{
+    return health;
+}
+
+int RPG::getStrength() const
+{
+    return strength;
+}
+
+int RPG::getDefense() const 
+{
+    return defense;
+}
+
+void RPG::setskills()
+{
+    if (type == "mage")
+    {
+        skills[0] = "fire";       
+        skills[1] = "thunder";    
+    }
+    else if(type == "thief")
+    {
+        skills[0] = "pilfer";     
+        skills[1] = "jab";        
+    }
+    else if(type == "archer")
+    {
+        skills[0] = "parry";            
+        skills[1] = "crossbow_attack";  
+    }
+    else
+    {
+        skills[0] = "slash";    
+        skills[1] = "parry";    
+    }
+}
+
+void RPG::printAction(string skill, RPG opponent)
+{
+    printf("%s used %s on %s\n", name.c_str(), skill.c_str(), opponent.getName().c_str());
+}
+
+void RPG::updateHealth(int New_Health)
+{
+    health = New_Health;
+}
+
+bool RPG::isAlive() const
+{
+    return health > 0;
+}
+
+void RPG::attack(RPG * target, int skill_choice, int used_parry)
+{
+    if(used_parry == 1)//this executes when NPC uses parry
+    {
+        int damage = target->strength - target->getDefense();
+        if (damage < 0)
+        {
+            damage = 0;
+        }
+        target->updateHealth(target->getHealth() - damage);
+        printAction(skills[skill_choice], *target);
+    }
+    else if(used_parry == 0)//this executes when NPC doesnt use parry
+    {
+        int damage = strength - target->getDefense();
+        if (damage < 0)
+        {
+            damage = 0;
+        }
+        target->updateHealth(target->getHealth() - damage);
+        printAction(skills[skill_choice], *target);
+    }
+}
+
+void RPG::useSkill(RPG * target, int skill_choice, int used_parry)
+{
+    if(used_parry == 1)//A player used parry
+    {
+        int damage = (target->strength * 2) - target->getDefense(); 
+        if (damage < 0)
+        {
+            damage = 0;
+        }
+        target->updateHealth(target->getHealth() - damage); 
+        printAction(skills[skill_choice], *target);
+    }
+    else if(used_parry == 0) //players didnt use parry
+    {
+        int damage = (strength * 2) - target->getDefense(); 
+        if (damage < 0)
+        {
+            damage = 0;
+        }
+        target->updateHealth(target->getHealth() - damage); 
+        printAction(skills[skill_choice], *target); 
+    }
+}
+
+void RPG::printSkills() const
+{
+    cout << name << "'s skills are:\n";
+    for (int i = 0; i < SKILL_SIZE; i++) {
+        cout << i << ".)" << skills[i] << endl;
+    }
+}
+
+string RPG::getSkill(int index) const
+{
+    return skills[index];
+}
